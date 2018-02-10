@@ -72,5 +72,13 @@ module.exports = {
         }
       ]
     }
-  }
+  },
+    "stores": {
+      "this store": {
+        "sells": "latte"
+      },
+        "that store": {
+            "sells": "something worse"
+        },
+    }
 };
