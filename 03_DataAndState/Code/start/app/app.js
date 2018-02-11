@@ -24,7 +24,6 @@ var App = React.createClass({
     render : function() {
         return (
             <div>
-                <div id="header">Hello</div>
                 <button onClick={this.loadSampleData}>Load Sample Data </button>
                 <div className="container">
                     <div className="column">
@@ -32,6 +31,9 @@ var App = React.createClass({
                     </div>
                     <div className="column">
                         <ConversationPane conversation={this.state.selectedConversation}/>
+                    </div>
+                    <div className="column">
+                        <StorePane stores={this.state.stores}/>
                     </div>
                 </div>
             </div>
@@ -65,24 +67,16 @@ var InboxPane = React.createClass({
 });
 
 var StorePane = React.createClass ({
-    renderStoreItem: function (store) {
-        return <StoreItem key={store} name={store} details={this.props.stores[store]} />
+    renderStore: function (store) {
+        return <Store key={store} name={store} details={this.props.stores[store]} />
     },
     render: function () {
         return (
-            <div id="store-pane">
+            <div id="stores-pane">
                 <h1>Stores</h1>
-                <table>
-                    <thead>
-                    <tr>
-                        <th>Store Name</th>
-                        <th>Sells</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {Object.keys(this.props.stores).map(this.renderStoreItem)}
-                    </tbody>
-                </table>
+                <ul>
+                    {Object.keys(this.props.stores).map(this.renderStore)}
+                </ul>
             </div>
         )
     }
@@ -112,14 +106,21 @@ var InboxItem = React.createClass({
     }
 });
 
-var StoreItem = React.createClass({
-
+var Store = React.createClass({
+    getCount: function (status) {
+        return this.props.details.orders
+           .filter(function (n) {
+                return n.status === status //if
+            }).length;
+    },
     render: function(){
         return (
-            <tr>
-                <td>{this.props.name}</td>
-                <td>{this.props.details.sells}</td>
-            </tr>
+            <li>
+                <p>{this.props.name}</p>
+                <p>Orders confirmed: {this.getCount("Confirmed")}</p>
+                <p>Orders in the oven: {this.getCount("In The Oven")}</p>
+                <p>Orders Delivered: {this.getCount("Delivered")}</p>
+            </li>
         )
     }
 });
